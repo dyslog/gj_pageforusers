@@ -98,8 +98,17 @@ function create_authors_page($user_id) {
     $my_post['post_status']  = 'publish';
     $my_post['post_theme']   = 'user-profile';
 
+    $my_post['post_author']   = $user_id;
+    
     wp_insert_post( $my_post );
+   // update_post_meta($my_post , 'about_author', $new_user_name);
+          //  update_post_meta($my_post , 'about_author_ID', $user_id);
 
   }
+
+//////SEttings
+
+include "settings_gj_up.php";
+
 
 ?>
