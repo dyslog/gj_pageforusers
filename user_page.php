@@ -15,6 +15,9 @@
 // Our custom post type function
 function create_posttype() {
   
+
+    flush_rewrite_rules( false );
+
     register_post_type( 'userspages',
     // CPT Options
         array(
@@ -24,7 +27,7 @@ function create_posttype() {
             ),
              'supports'            => array( 'title', 'editor', 'excerpt', 'author', 'thumbnail', 'comments', 'revisions', 'custom-fields', ),
         // You can associate this CPT with a taxonomy or custom taxonomy. 
-        'taxonomies'          => array( 'audio','luci' ),
+       // 'taxonomies'          => array( 'audio','luci' ),
             'public' => true,
             'has_archive' => true,
             'rewrite' => array('slug' => 'userspages'),
@@ -100,15 +103,92 @@ function create_authors_page($user_id) {
 
     $my_post['post_author']   = $user_id;
     
-    wp_insert_post( $my_post );
+    //wp_insert_post( $my_post );
+
+
    // update_post_meta($my_post , 'about_author', $new_user_name);
           //  update_post_meta($my_post , 'about_author_ID', $user_id);
+
+          update_usermeta( $user_id, 'twitter', wp_insert_post( $my_post ) );
 
   }
 
 //////SEttings
 
 include "settings_gj_up.php";
+
+
+
+
+///////Redirect
+
+function custom_login_redirect( $redirect_to, $request, $user) {
+
+    $user_id = get_current_user_id();
+    
+    $myID = $user->ID;
+    $post_id = get_the_author_meta( 'twitter', $myID);
+
+    //return get_post_permalink($post_id ).'hello'.$myID.'_'.get_the_author_meta( 'twitter', $myID);
+    return get_post_permalink($post_id );
+    }
+    
+    add_filter('login_redirect', 'custom_login_redirect', 10, 3);
+
+
+//////////////After Redirect
+/*
+add_filter( 'login_redirect', 'redirect_to_home', 10, 3 );
+function redirect_to_home( $redirect_to, $request, $user ) {
+
+    if( $user->ID == 6 ) {
+        //If user ID is 6, redirect to home
+        return get_home_url();
+    } else {
+        //If user ID is not 6, leave WordPress handle the redirection as usual
+        return $redirect_to;
+    }
+
+}*/
+
+
+//////////////////////Settings USER Pages
+
+/**/
+add_action( 'show_user_profile', 'my_show_extra_profile_fields' );
+add_action( 'edit_user_profile', 'my_show_extra_profile_fields' );
+
+function my_show_extra_profile_fields( $user ) { ?>
+
+	<h3>Extra profile information</h3>
+
+	<table class="form-table">
+
+		<tr>
+			<th><label for="twitter">Twitter</label></th>
+
+			<td>
+				<input type="text" name="twitter" id="twitter" value="<?php echo esc_attr( get_the_author_meta( 'twitter', $user->ID ) ); ?>" class="regular-text" /><br />
+				<span class="description"><?php echo esc_attr( get_the_author_meta( 'twitter', $user->ID ) ); ?></span>
+			</td>
+		</tr>
+
+	</table>
+<?php }
+
+
+add_action( 'personal_options_update', 'my_save_extra_profile_fields' );
+add_action( 'edit_user_profile_update', 'my_save_extra_profile_fields' );
+
+function my_save_extra_profile_fields( $user_id ) {
+
+	if ( !current_user_can( 'edit_user', $user_id ) )
+		return false;
+
+	
+	update_usermeta( $user_id, 'twitter', $_POST['twitter'] );
+}
+
 
 
 ?>
