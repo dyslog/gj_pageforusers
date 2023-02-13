@@ -44,6 +44,8 @@ add_action( 'init', 'create_posttype' );
 
 
 // Hook activation to create new Author Pages
+
+/*
 register_activation_hook(__FILE__, function(){
     // Create a Parent Page for all Author Pages
     if(!($parent = get_page_by_title('Authors'))){
@@ -87,6 +89,11 @@ register_activation_hook(__FILE__, function(){
   //  deactivate_plugins(__FILE__, true);
   //  die;
 });
+*/
+
+
+
+
 
 
  add_action('user_register', 'create_authors_page');
@@ -133,7 +140,11 @@ function custom_login_redirect( $redirect_to, $request, $user) {
     return get_post_permalink($post_id );
     }
     
-    add_filter('login_redirect', 'custom_login_redirect', 10, 3);
+   // add_filter('login_redirect', 'custom_login_redirect', 10, 3);
+    add_filter('login_redirect', 'custom_login_redirect',1,3);
+   
+
+
 
 
 //////////////After Redirect
