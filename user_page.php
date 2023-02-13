@@ -176,7 +176,7 @@ function my_show_extra_profile_fields( $user ) { ?>
 	<table class="form-table">
 
 		<tr>
-			<th><label for="twitter">Twitter</label></th>
+			<th><label for="twitter">User Page ID</label></th>
 
 			<td>
 				<input type="text" name="twitter" id="twitter" value="<?php echo esc_attr( get_the_author_meta( 'twitter', $user->ID ) ); ?>" class="regular-text" /><br />
