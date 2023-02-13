@@ -137,11 +137,20 @@ function custom_login_redirect( $redirect_to, $request, $user) {
     $post_id = get_the_author_meta( 'twitter', $myID);
 
     //return get_post_permalink($post_id ).'hello'.$myID.'_'.get_the_author_meta( 'twitter', $myID);
-    return get_post_permalink($post_id );
+
+    $options = get_option( 'gj_up_settings' );
+			//echo $options['gj_up_select_field_0'];
+            if($options['gj_up_select_field_0']==1){
+                return get_post_permalink($post_id );
+            }else{
+                return $redirect_to;
+            }
+            
+    
     }
     
    // add_filter('login_redirect', 'custom_login_redirect', 10, 3);
-    add_filter('login_redirect', 'custom_login_redirect',1,3);
+    add_filter('login_redirect', 'custom_login_redirect',10,3);
    
 
 
