@@ -90,7 +90,7 @@ function gj_up_options_page(  ) {
 
 			settings_fields( 'pluginPage' );
 			do_settings_sections( 'pluginPage' );
-			echo '<input type="" value="true" name="test_button" />';
+			
 			submit_button();
 
 			if (isset($_POST['test_button'])){
